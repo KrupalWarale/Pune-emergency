@@ -10,7 +10,14 @@ console.log('🚀 Connecting to Supabase PostgreSQL database');
 
 const sequelize = new Sequelize(process.env.SUPABASE_DB_URL, {
   dialect: 'postgres',
+  dialectModule: require('pg'),
   logging: false,
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000
+  },
   dialectOptions: {
     ssl: {
       require: true,
