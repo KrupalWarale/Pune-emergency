@@ -5,7 +5,7 @@ A comprehensive emergency medical services platform for Pune district, featuring
 ## ✅ What's Included
 
 - **Express REST API** with 8 endpoints
-- **SQLite Database** (zero-config, automatic setup)
+- **Supabase PostgreSQL Database** (cloud-hosted, scalable)
 - **6 Data Models**: Hospitals, Ambulances, Bookings, Volunteers, Blood Bank, Patients
 - **Automatic Seeding**: 170+ Pune hospitals, 37 ambulances, 96 blood bank records automatically populated on first run
 - **Distance Calculation**: Haversine formula for finding nearest hospitals
@@ -22,7 +22,9 @@ Edit the `.env` file and add your Google Maps API Key:
 PORT=5000
 JWT_SECRET=your_secret_here
 GOOGLE_MAPS_API_KEY=your_google_maps_key_here
-DB_STORAGE=./database.sqlite
+SUPABASE_DB_URL=your_supabase_database_url
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
 ### 2. Start the Application
@@ -62,7 +64,7 @@ Open `http://localhost:5000` in your browser.
 ## 📁 Project Structure
 
 ```
-├── models/           # Sequelize models (SQLite)
+├── models/           # Sequelize models (PostgreSQL)
 ├── routes/           # API route handlers
 ├── utils/            # Helper functions & auto-seeding logic
 ├── public/           # Frontend assets (HTML, CSS, JS)
@@ -73,4 +75,4 @@ Open `http://localhost:5000` in your browser.
 
 ## 🗄️ Database
 
-Uses **SQLite**. The database is created and seeded automatically on the first run of the server. No manual seeding steps are required.
+Uses **Supabase PostgreSQL**. The database tables are created automatically using Sequelize migrations. Data is migrated from SQLite to Supabase for production scalability.

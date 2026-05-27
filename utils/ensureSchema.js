@@ -8,8 +8,12 @@ async function getTableColumns(sequelize, tableName) {
       `);
       return new Set((rows || []).map(row => row.name));
     } else {
-      // SQLite
-      const [rows] = await sequelize.query(`PRAGMA table_info('${tableName}')`);
+      // PostgreSQL
+      const [rows] = await sequelize.query(`
+        SELECT column_name as name 
+        FROM information_schema.columns 
+        WHERE table_name = '${tableName}' AND table_schema = 'public'
+      `);
       return new Set((rows || []).map(row => row.name));
     }
   } catch (error) {
