@@ -1,0 +1,3026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PuneEmergency — Emergency Medical Services</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script src="https://maps.googleapis.com/maps/api/js?key=%GOOGLE_MAPS_API_KEY%&loading=async&libraries=places,geometry,marker&v=beta" defer></script>
+  
+  <style>
+    :root {
+      /* Modern Color Palette */
+      --primary: #dc2626;
+      --primary-light: #fef2f2;
+      --primary-dark: #991b1b;
+      --secondary: #059669;
+      --secondary-light: #ecfdf5;
+      --accent: #3b82f6;
+      --accent-light: #eff6ff;
+      
+      /* Neutrals */
+      --white: #ffffff;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+      
+      /* Shadows */
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+      
+      /* Border Radius */
+      --radius-sm: 0.375rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-900);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Navigation */
+    .navbar {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-200);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(8px);
+      background: rgba(255, 255, 255, 0.95);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 4rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 800;
+      font-size: 1.25rem;
+      color: var(--primary);
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .pulse-indicator {
+      width: 8px;
+      height: 8px;
+      background: var(--primary);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border: none;
+      background: none;
+      color: var(--gray-600);
+      font-size: 0.875rem;
+      font-weight: 500;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .nav-btn:hover {
+      background: var(--gray-100);
+      color: var(--gray-900);
+    }
+
+    .nav-btn.active {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .sos-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-lg);
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-md);
+    }
+
+    .sos-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Page Container */
+    .page {
+      display: none;
+      min-height: calc(100vh - 4rem);
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    /* Home Page */
+    .hero-section {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: var(--white);
+      padding: 4rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 50%;
+      height: 100%;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+      opacity: 0.3;
+    }
+
+    .hero-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-content h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+
+    .hero-content p {
+      font-size: 1.125rem;
+      opacity: 0.9;
+      margin-bottom: 2rem;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.875rem 1.5rem;
+      background: var(--white);
+      color: var(--primary);
+      border: none;
+      border-radius: var(--radius-lg);
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.875rem 1.5rem;
+      background: transparent;
+      color: var(--white);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: var(--radius-lg);
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .hero-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .map-preview {
+      width: 100%;
+      max-width: 400px;
+      height: 300px;
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-xl);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .map-grid {
+      position: absolute;
+      inset: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="%23e5e7eb"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
+    }
+
+    .location-pin {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 24px;
+      height: 24px;
+      background: var(--primary);
+      border: 3px solid var(--white);
+      border-radius: 50%;
+      box-shadow: 0 0 0 8px rgba(220, 38, 38, 0.2);
+      animation: ping 2s infinite;
+    }
+
+    @keyframes ping {
+      0% { box-shadow: 0 0 0 8px rgba(220, 38, 38, 0.2); }
+      75%, 100% { box-shadow: 0 0 0 20px rgba(220, 38, 38, 0); }
+    }
+
+    /* Services Section */
+    .services-section {
+      padding: 4rem 0;
+      background: var(--white);
+    }
+
+    .services-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-header h2 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      color: var(--gray-900);
+      margin-bottom: 1rem;
+    }
+
+    .section-header p {
+      font-size: 1.125rem;
+      color: var(--gray-600);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .service-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--primary);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--primary);
+    }
+
+    .service-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .service-icon {
+      width: 64px;
+      height: 64px;
+      background: var(--primary-light);
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      color: var(--primary);
+      font-size: 2rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 0.75rem;
+    }
+
+    .service-card p {
+      color: var(--gray-600);
+      line-height: 1.6;
+    }
+
+    /* Stats Section */
+    .stats-section {
+      background: var(--gray-900);
+      color: var(--white);
+      padding: 3rem 0;
+    }
+
+    .stats-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      text-align: center;
+    }
+
+    .stat-item h3 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-item p {
+      color: var(--gray-300);
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Emergency Banner */
+    .emergency-banner {
+      background: var(--primary);
+      color: var(--white);
+      padding: 1.5rem 0;
+      text-align: center;
+    }
+
+    .emergency-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .emergency-text {
+      flex: 1;
+    }
+
+    .emergency-text h3 {
+      font-size: 1.125rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .emergency-text p {
+      opacity: 0.9;
+      font-size: 0.875rem;
+    }
+
+    .emergency-numbers {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .emergency-number {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .emergency-number:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Mobile Navigation */
+    .mobile-nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--gray-600);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.5rem;
+    }
+
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: 4rem;
+      left: 0;
+      right: 0;
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-200);
+      box-shadow: var(--shadow-lg);
+      z-index: 40;
+    }
+
+    .mobile-nav.active {
+      display: block;
+    }
+
+    .mobile-nav-links {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+      gap: 0.5rem;
+    }
+
+    .mobile-nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem;
+      border: none;
+      background: none;
+      color: var(--gray-600);
+      font-size: 1rem;
+      font-weight: 500;
+      text-align: left;
+      cursor: pointer;
+      border-radius: var(--radius-md);
+      transition: all 0.2s ease;
+    }
+
+    .mobile-nav-btn:hover {
+      background: var(--gray-100);
+      color: var(--gray-900);
+    }
+
+    .mobile-nav-btn.active {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    /* Enhanced Responsive Design */
+    @media (max-width: 1200px) {
+      .finder-container {
+        grid-template-columns: 350px 1fr;
+      }
+
+      .ambulance-container {
+        grid-template-columns: 1fr 350px;
+      }
+
+      .blood-types-overview {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .finder-container {
+        grid-template-columns: 320px 1fr;
+      }
+
+      .ambulance-container {
+        grid-template-columns: 1fr 320px;
+      }
+
+      .blood-types-overview {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hero-container {
+        gap: 2rem;
+      }
+
+      .hero-content h1 {
+        font-size: 2.5rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .mobile-nav-toggle {
+        display: block;
+      }
+
+      .hero-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 2rem;
+        padding: 0 1rem;
+      }
+
+      .hero-content h1 {
+        font-size: 2rem;
+        line-height: 1.2;
+      }
+
+      .hero-content p {
+        font-size: 1rem;
+      }
+
+      .hero-actions {
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .btn-primary,
+      .btn-secondary {
+        width: 100%;
+        max-width: 280px;
+        justify-content: center;
+        padding: 1rem 1.5rem;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+      }
+
+      .emergency-container {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+      }
+
+      .emergency-numbers {
+        justify-content: center;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      .emergency-number {
+        width: 100%;
+        max-width: 200px;
+        justify-content: center;
+        padding: 0.75rem 1rem;
+      }
+
+      /* Hospital Finder Mobile */
+      .finder-container {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+
+      .finder-sidebar {
+        border-right: none;
+        border-bottom: 1px solid var(--gray-200);
+        max-height: 60vh;
+        overflow-y: auto;
+      }
+
+      .finder-header {
+        padding: 1.5rem;
+      }
+
+      .search-section {
+        padding: 1rem 1.5rem;
+      }
+
+      .hospitals-list {
+        padding: 0.5rem 1rem;
+        max-height: 40vh;
+      }
+
+      .finder-map {
+        min-height: 40vh;
+      }
+
+      .hospital-card {
+        padding: 1.25rem;
+      }
+
+      .hospital-actions {
+        gap: 0.75rem;
+      }
+
+      .hospital-btn {
+        padding: 0.75rem 1rem;
+        font-size: 0.8rem;
+        min-height: 44px;
+      }
+
+      /* Ambulance Mobile */
+      .ambulance-container {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+
+      .ambulance-form {
+        padding: 1.5rem;
+      }
+
+      .ambulance-status {
+        border-left: none;
+        border-top: 1px solid var(--gray-200);
+        padding: 1.5rem;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .emergency-types {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+      }
+
+      .emergency-card {
+        padding: 1.25rem;
+        min-height: 80px;
+      }
+
+      .book-ambulance-btn {
+        padding: 1.25rem 2rem;
+        font-size: 1.1rem;
+        min-height: 56px;
+      }
+
+      /* Blood Bank Mobile */
+      .blood-container {
+        padding: 1rem;
+      }
+
+      .blood-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+        padding: 1.5rem;
+      }
+
+      .blood-search {
+        width: 100%;
+        justify-content: center;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .blood-select {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1rem;
+        min-height: 48px;
+      }
+
+      .search-blood-btn {
+        width: 100%;
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+        min-height: 48px;
+        justify-content: center;
+      }
+
+      .blood-types-overview {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+      }
+
+      .blood-type-card {
+        padding: 1rem;
+        min-height: 80px;
+      }
+
+      .blood-results {
+        padding: 1.5rem;
+      }
+
+      .bank-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+
+      .bank-contact {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+
+      .contact-btn {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+        min-height: 44px;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .nav-container {
+        padding: 0 0.75rem;
+      }
+
+      .logo {
+        font-size: 1.125rem;
+      }
+
+      .sos-btn {
+        padding: 0.625rem 1rem;
+        font-size: 0.8rem;
+      }
+
+      .hero-section {
+        padding: 2rem 0;
+      }
+
+      .hero-content h1 {
+        font-size: 1.875rem;
+      }
+
+      .hero-content p {
+        font-size: 1rem;
+      }
+
+      .btn-primary,
+      .btn-secondary {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.875rem;
+      }
+
+      .section-header h2 {
+        font-size: 1.875rem;
+      }
+
+      .service-card {
+        padding: 1.5rem;
+      }
+
+      .stat-item h3 {
+        font-size: 2rem;
+      }
+
+      .blood-types-overview {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .emergency-numbers {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .emergency-number {
+        justify-content: center;
+      }
+    }
+
+    /* Utility Classes */
+    .hidden { display: none !important; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+    /* Hospital Finder Styles */
+    .finder-container {
+      display: grid;
+      grid-template-columns: 400px 1fr;
+      height: calc(100vh - 4rem);
+    }
+
+    .finder-sidebar {
+      background: var(--white);
+      border-right: 1px solid var(--gray-200);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .finder-header {
+      padding: 2rem;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .finder-header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 0.5rem;
+    }
+
+    .finder-header p {
+      color: var(--gray-600);
+      font-size: 0.875rem;
+    }
+
+    .search-section {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .search-input-group {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .search-input-group .material-symbols-outlined {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray-400);
+      font-size: 1.25rem;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.75rem 1rem 0.75rem 3rem;
+      border: 1px solid var(--gray-300);
+      border-radius: var(--radius-lg);
+      font-size: 0.875rem;
+      transition: all 0.2s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+    }
+
+    .filter-section h4 {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 0.75rem;
+    }
+
+    .filter-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .filter-chip {
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--gray-300);
+      background: var(--white);
+      color: var(--gray-600);
+      border-radius: var(--radius-md);
+      font-size: 0.75rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-chip:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .filter-chip.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: var(--white);
+    }
+
+    .hospitals-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+    }
+
+    .hospital-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .hospital-card:hover {
+      border-color: var(--primary);
+      box-shadow: var(--shadow-md);
+    }
+
+    .hospital-card.selected {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .hospital-name {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 0.5rem;
+    }
+
+    .hospital-address {
+      font-size: 0.875rem;
+      color: var(--gray-600);
+      margin-bottom: 0.75rem;
+    }
+
+    .hospital-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .hospital-distance {
+      font-size: 0.75rem;
+      color: var(--primary);
+      font-weight: 600;
+      background: var(--primary-light);
+      padding: 0.25rem 0.5rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .hospital-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .status-dot.available {
+      background: var(--secondary);
+    }
+
+    .status-dot.busy {
+      background: #f59e0b;
+    }
+
+    .status-dot.full {
+      background: var(--primary);
+    }
+
+    .hospital-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .hospital-btn {
+      flex: 1;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 0.75rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .call-btn {
+      background: var(--secondary);
+      color: var(--white);
+    }
+
+    .call-btn:hover {
+      background: #047857;
+    }
+
+    .directions-btn {
+      background: var(--accent);
+      color: var(--white);
+    }
+
+    .directions-btn:hover {
+      background: #2563eb;
+    }
+
+    .finder-map {
+      position: relative;
+      background: var(--gray-100);
+    }
+
+    .map-container {
+      width: 100%;
+      height: 100%;
+    }
+
+    .map-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: var(--gray-400);
+    }
+
+    .map-placeholder .material-symbols-outlined {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    .map-controls {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .map-control-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      background: var(--white);
+      border: 1px solid var(--gray-300);
+      border-radius: var(--radius-lg);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s ease;
+    }
+
+    .map-control-btn:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Ambulance Booking Styles */
+    .ambulance-container {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      height: calc(100vh - 4rem);
+    }
+
+    .ambulance-form {
+      padding: 2rem;
+      overflow-y: auto;
+      background: var(--white);
+    }
+
+    .form-header {
+      margin-bottom: 2rem;
+    }
+
+    .form-header h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 0.5rem;
+    }
+
+    .form-header p {
+      color: var(--gray-600);
+      font-size: 0.875rem;
+    }
+
+    .booking-form {
+      max-width: 600px;
+    }
+
+    .form-section {
+      margin-bottom: 2rem;
+    }
+
+    .form-section h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 1rem;
+    }
+
+    .emergency-types {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+    }
+
+    .emergency-type {
+      cursor: pointer;
+    }
+
+    .emergency-type input {
+      display: none;
+    }
+
+    .emergency-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1.5rem;
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .emergency-card .material-symbols-outlined {
+      font-size: 2rem;
+      color: var(--gray-400);
+    }
+
+    .emergency-card span:last-child {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--gray-600);
+    }
+
+    .emergency-type input:checked + .emergency-card {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .emergency-type input:checked + .emergency-card .material-symbols-outlined {
+      color: var(--primary);
+    }
+
+    .emergency-type input:checked + .emergency-card span:last-child {
+      color: var(--primary);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--gray-700);
+      margin-bottom: 0.5rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      padding: 0.75rem;
+      border: 1px solid var(--gray-300);
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      transition: all 0.2s ease;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .location-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      background: var(--accent-light);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 0.75rem;
+      transition: all 0.2s ease;
+      width: fit-content;
+    }
+
+    .location-btn:hover {
+      background: var(--accent);
+      color: var(--white);
+    }
+
+    .book-ambulance-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      width: 100%;
+      padding: 1rem 2rem;
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-lg);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 1rem;
+    }
+
+    .book-ambulance-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .ambulance-status {
+      background: var(--gray-50);
+      border-left: 1px solid var(--gray-200);
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    .status-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .status-header h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--gray-900);
+    }
+
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--gray-600);
+    }
+
+    .status-dot.active {
+      background: var(--secondary);
+      animation: pulse 2s infinite;
+    }
+
+    .ambulance-vehicles {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .ambulance-vehicle {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 1rem;
+      transition: all 0.2s ease;
+    }
+
+    .ambulance-vehicle.available {
+      border-left: 4px solid var(--secondary);
+    }
+
+    .ambulance-vehicle.busy {
+      border-left: 4px solid #f59e0b;
+    }
+
+    .vehicle-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .vehicle-id {
+      font-weight: 600;
+      color: var(--gray-900);
+    }
+
+    .vehicle-status {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: var(--radius-sm);
+      font-weight: 500;
+    }
+
+    .vehicle-status.available {
+      background: var(--secondary-light);
+      color: var(--secondary);
+    }
+
+    .vehicle-status.busy {
+      background: #fef3c7;
+      color: #f59e0b;
+    }
+
+    .vehicle-info {
+      font-size: 0.875rem;
+      color: var(--gray-600);
+      margin-bottom: 0.5rem;
+    }
+
+    .vehicle-eta {
+      font-size: 0.75rem;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .booking-confirmation {
+      background: var(--white);
+      border: 2px solid var(--secondary);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .confirmation-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .confirmation-header .material-symbols-outlined {
+      color: var(--secondary);
+      font-size: 1.5rem;
+    }
+
+    .confirmation-header h4 {
+      color: var(--secondary);
+      font-weight: 600;
+    }
+
+    .confirmation-details p {
+      color: var(--gray-600);
+      margin-bottom: 1rem;
+    }
+
+    .booking-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.875rem;
+    }
+
+    .info-item .label {
+      color: var(--gray-600);
+    }
+
+    .info-item .value {
+      font-weight: 600;
+      color: var(--gray-900);
+    }
+
+    .track-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      width: 100%;
+      padding: 0.75rem;
+      background: var(--secondary);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-md);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .track-btn:hover {
+      background: #047857;
+    }
+
+    /* Blood Bank Styles */
+    .blood-container {
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .blood-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding: 2rem;
+      background: var(--primary-dark);
+      color: var(--white);
+      border-radius: var(--radius-xl);
+    }
+
+    .blood-header-content h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .blood-header-content p {
+      opacity: 0.9;
+      font-size: 0.875rem;
+    }
+
+    .blood-search {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .blood-select {
+      padding: 0.75rem 1rem;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      background: var(--white);
+      color: var(--gray-900);
+      cursor: pointer;
+      min-width: 150px;
+    }
+
+    .search-blood-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: var(--white);
+      color: var(--primary-dark);
+      border: none;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .search-blood-btn:hover {
+      background: var(--gray-100);
+    }
+
+    .blood-types-overview {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .blood-type-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .blood-type-card:hover {
+      border-color: var(--primary);
+      box-shadow: var(--shadow-md);
+    }
+
+    .blood-type-card.selected {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .blood-type-label {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .availability-status {
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .availability-status .availability-text {
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .blood-type-card:nth-child(1) .availability-text,
+    .blood-type-card:nth-child(3) .availability-text,
+    .blood-type-card:nth-child(5) .availability-text,
+    .blood-type-card:nth-child(7) .availability-text {
+      background: var(--secondary-light);
+      color: var(--secondary);
+    }
+
+    .blood-type-card:nth-child(2) .availability-text,
+    .blood-type-card:nth-child(6) .availability-text {
+      background: #fef3c7;
+      color: #f59e0b;
+    }
+
+    .blood-type-card:nth-child(4) .availability-text,
+    .blood-type-card:nth-child(8) .availability-text {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .blood-results {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+    }
+
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .results-header h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--gray-900);
+    }
+
+    .results-count {
+      font-size: 0.875rem;
+      color: var(--gray-600);
+    }
+
+    .blood-banks-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .blood-bank-card {
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      transition: all 0.2s ease;
+    }
+
+    .blood-bank-card:hover {
+      border-color: var(--primary);
+      box-shadow: var(--shadow-md);
+    }
+
+    .bank-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 1rem;
+    }
+
+    .bank-name {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 0.25rem;
+    }
+
+    .bank-hospital {
+      font-size: 0.875rem;
+      color: var(--gray-600);
+    }
+
+    .units-available {
+      text-align: right;
+    }
+
+    .units-count {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .units-label {
+      font-size: 0.75rem;
+      color: var(--gray-600);
+    }
+
+    .bank-contact {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .contact-info {
+      font-size: 0.875rem;
+      color: var(--gray-600);
+    }
+
+    .contact-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--secondary);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 0.75rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .contact-btn:hover {
+      background: #047857;
+    }
+
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem;
+      color: var(--gray-400);
+      text-align: center;
+    }
+
+    .empty-state .material-symbols-outlined {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .loading-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      color: var(--gray-400);
+      text-align: center;
+    }
+
+    .loading-state .material-symbols-outlined {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes slideIn {
+      from { 
+        transform: translateX(100%); 
+        opacity: 0; 
+      }
+      to { 
+        transform: translateX(0); 
+        opacity: 1; 
+      }
+    }
+
+    @keyframes slideOut {
+      from { 
+        transform: translateX(0); 
+        opacity: 1; 
+      }
+      to { 
+        transform: translateX(100%); 
+        opacity: 0; 
+      }
+    }
+
+    /* Notification Styles */
+    .notification {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    /* Enhanced Button Interactions */
+    .hospital-btn:active,
+    .call-btn:active,
+    .directions-btn:active,
+    .contact-btn:active,
+    .track-btn:active,
+    .book-ambulance-btn:active,
+    .search-blood-btn:active,
+    .location-btn:active,
+    .map-control-btn:active,
+    .btn-primary:active,
+    .btn-secondary:active,
+    .sos-btn:active {
+      transform: translateY(1px);
+    }
+
+    /* Focus states for accessibility */
+    .hospital-btn:focus,
+    .call-btn:focus,
+    .directions-btn:focus,
+    .contact-btn:focus,
+    .track-btn:focus,
+    .book-ambulance-btn:focus,
+    .search-blood-btn:focus,
+    .location-btn:focus,
+    .map-control-btn:focus,
+    .btn-primary:focus,
+    .btn-secondary:focus,
+    .sos-btn:focus,
+    .nav-btn:focus,
+    .mobile-nav-btn:focus {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    /* Loading states */
+    .loading {
+      position: relative;
+      pointer-events: none;
+    }
+
+    .loading::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 20px;
+      height: 20px;
+      margin: -10px 0 0 -10px;
+      border: 2px solid transparent;
+      border-top: 2px solid currentColor;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="#" class="logo" onclick="showPage('home')">
+        <div class="pulse-indicator"></div>
+        PuneEmergency
+      </a>
+      
+      <div class="nav-links">
+        <button class="nav-btn active" onclick="showPage('home', this)">
+          <span class="material-symbols-outlined">home</span>
+          Home
+        </button>
+        <button class="nav-btn" onclick="showPage('finder', this)">
+          <span class="material-symbols-outlined">local_hospital</span>
+          Find Hospital
+        </button>
+        <button class="nav-btn" onclick="showPage('ambulance', this)">
+          <span class="material-symbols-outlined">ambulance</span>
+          Ambulance
+        </button>
+        <button class="nav-btn" onclick="showPage('blood', this)">
+          <span class="material-symbols-outlined">bloodtype</span>
+          Blood Bank
+        </button>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <button class="mobile-nav-toggle" onclick="toggleMobileNav()">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+        <button class="sos-btn" onclick="startSOSFlow()">
+          <span class="material-symbols-outlined">sos</span>
+          Emergency
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Navigation -->
+  <div class="mobile-nav" id="mobile-nav">
+    <div class="mobile-nav-links">
+      <button class="mobile-nav-btn active" onclick="showPage('home', this); closeMobileNav()">
+        <span class="material-symbols-outlined">home</span>
+        Home
+      </button>
+      <button class="mobile-nav-btn" onclick="showPage('finder', this); closeMobileNav()">
+        <span class="material-symbols-outlined">local_hospital</span>
+        Find Hospital
+      </button>
+      <button class="mobile-nav-btn" onclick="showPage('ambulance', this); closeMobileNav()">
+        <span class="material-symbols-outlined">ambulance</span>
+        Ambulance
+      </button>
+      <button class="mobile-nav-btn" onclick="showPage('blood', this); closeMobileNav()">
+        <span class="material-symbols-outlined">bloodtype</span>
+        Blood Bank
+      </button>
+    </div>
+  </div>
+    </div>
+  </nav>
+
+  <!-- Home Page -->
+  <div class="page active" id="page-home">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-container">
+        <div class="hero-content">
+          <h1>Emergency help, seconds away</h1>
+          <p>Find nearest hospitals, book ambulances instantly, and get critical help fast — built exclusively for Pune district residents.</p>
+          
+          <div class="hero-actions">
+            <button class="btn-primary" onclick="showPage('finder', document.querySelectorAll('.nav-btn')[1])">
+              <span class="material-symbols-outlined">search</span>
+              Find Hospital
+            </button>
+            <button class="btn-secondary" onclick="showPage('ambulance', document.querySelectorAll('.nav-btn')[2])">
+              <span class="material-symbols-outlined">ambulance</span>
+              Call Ambulance
+            </button>
+          </div>
+        </div>
+        
+        <div class="hero-visual">
+          <div class="map-preview">
+            <div class="map-grid"></div>
+            <div class="location-pin"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services-section">
+      <div class="services-container">
+        <div class="section-header">
+          <h2>Emergency Services</h2>
+          <p>Comprehensive medical emergency services designed to save lives and provide immediate care when you need it most.</p>
+        </div>
+        
+        <div class="services-grid">
+          <div class="service-card" onclick="showPage('finder', document.querySelectorAll('.nav-btn')[1])">
+            <div class="service-icon">
+              <span class="material-symbols-outlined">local_hospital</span>
+            </div>
+            <h3>Hospital Finder</h3>
+            <p>Locate the nearest hospitals with real-time availability, specialties, and contact information.</p>
+          </div>
+          
+          <div class="service-card" onclick="showPage('ambulance', document.querySelectorAll('.nav-btn')[2])">
+            <div class="service-icon">
+              <span class="material-symbols-outlined">ambulance</span>
+            </div>
+            <h3>Ambulance Booking</h3>
+            <p>Book emergency ambulances with GPS tracking and direct communication with medical staff.</p>
+          </div>
+          
+          <div class="service-card" onclick="showPage('blood', document.querySelectorAll('.nav-btn')[3])">
+            <div class="service-icon">
+              <span class="material-symbols-outlined">bloodtype</span>
+            </div>
+            <h3>Blood Bank</h3>
+            <p>Find blood donors and blood banks with real-time inventory and emergency blood requests.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+      <div class="stats-container">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <h3>24/7</h3>
+            <p>Emergency Support</p>
+          </div>
+          <div class="stat-item">
+            <h3>150+</h3>
+            <p>Partner Hospitals</p>
+          </div>
+          <div class="stat-item">
+            <h3>500+</h3>
+            <p>Ambulances Available</p>
+          </div>
+          <div class="stat-item">
+            <h3>< 5min</h3>
+            <p>Average Response Time</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Emergency Banner -->
+    <section class="emergency-banner">
+      <div class="emergency-container">
+        <div class="emergency-text">
+          <h3>Emergency Helplines</h3>
+          <p>Available 24/7 for immediate assistance</p>
+        </div>
+        <div class="emergency-numbers">
+          <div class="emergency-number" onclick="window.open('tel:108')">
+            <span class="material-symbols-outlined">call</span>
+            108 - Ambulance
+          </div>
+          <div class="emergency-number" onclick="window.open('tel:102')">
+            <span class="material-symbols-outlined">call</span>
+            102 - Medical Emergency
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Hospital Finder Page -->
+  <div class="page" id="page-finder">
+    <div class="finder-container">
+      <div class="finder-sidebar">
+        <div class="finder-header">
+          <h2>Find Hospitals</h2>
+          <p>Locate nearby hospitals with real-time availability</p>
+        </div>
+        
+        <div class="search-section">
+          <div class="search-input-group">
+            <span class="material-symbols-outlined">search</span>
+            <input type="text" id="hospital-search" placeholder="Search hospitals..." class="search-input">
+          </div>
+          
+          <div class="filter-section">
+            <h4>Specialties</h4>
+            <div class="filter-chips">
+              <button class="filter-chip active" data-filter="all">All</button>
+              <button class="filter-chip" data-filter="emergency">Emergency</button>
+              <button class="filter-chip" data-filter="cardiology">Cardiology</button>
+              <button class="filter-chip" data-filter="neurology">Neurology</button>
+              <button class="filter-chip" data-filter="orthopedic">Orthopedic</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="hospitals-list" id="hospitals-list">
+          <div class="loading-state">
+            <span class="material-symbols-outlined">hourglass_empty</span>
+            <p>Finding nearby hospitals...</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="finder-map">
+        <div id="hospitals-map" class="map-container">
+          <div class="map-placeholder">
+            <span class="material-symbols-outlined">map</span>
+            <p>Map will load here</p>
+          </div>
+        </div>
+        
+        <div class="map-controls">
+          <button class="map-control-btn" onclick="getCurrentLocation()">
+            <span class="material-symbols-outlined">my_location</span>
+            My Location
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ambulance Booking Page -->
+  <div class="page" id="page-ambulance">
+    <div class="ambulance-container">
+      <div class="ambulance-form">
+        <div class="form-header">
+          <h2>Book Ambulance</h2>
+          <p>Emergency ambulance booking with real-time tracking</p>
+        </div>
+        
+        <form id="ambulance-booking-form" class="booking-form">
+          <div class="form-section">
+            <h4>Emergency Type</h4>
+            <div class="emergency-types">
+              <label class="emergency-type">
+                <input type="radio" name="emergencyType" value="medical" checked>
+                <div class="emergency-card">
+                  <span class="material-symbols-outlined">medical_services</span>
+                  <span>Medical Emergency</span>
+                </div>
+              </label>
+              <label class="emergency-type">
+                <input type="radio" name="emergencyType" value="accident">
+                <div class="emergency-card">
+                  <span class="material-symbols-outlined">car_crash</span>
+                  <span>Accident</span>
+                </div>
+              </label>
+              <label class="emergency-type">
+                <input type="radio" name="emergencyType" value="cardiac">
+                <div class="emergency-card">
+                  <span class="material-symbols-outlined">favorite</span>
+                  <span>Cardiac</span>
+                </div>
+              </label>
+            </div>
+          </div>
+          
+          <div class="form-section">
+            <h4>Patient Information</h4>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="patient-name">Patient Name</label>
+                <input type="text" id="patient-name" name="patientName" required>
+              </div>
+              <div class="form-group">
+                <label for="patient-phone">Contact Number</label>
+                <input type="tel" id="patient-phone" name="patientPhone" required>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-section">
+            <h4>Location</h4>
+            <div class="form-group">
+              <label for="location-text">Address</label>
+              <textarea id="location-text" name="locationText" placeholder="Enter pickup address..." required></textarea>
+            </div>
+            <button type="button" class="location-btn" onclick="getCurrentLocationForBooking()">
+              <span class="material-symbols-outlined">my_location</span>
+              Use Current Location
+            </button>
+          </div>
+          
+          <div class="form-section">
+            <h4>Additional Details</h4>
+            <div class="form-group">
+              <label for="incident-description">Incident Description</label>
+              <textarea id="incident-description" name="incidentDescription" placeholder="Brief description of the emergency..."></textarea>
+            </div>
+          </div>
+          
+          <button type="submit" class="book-ambulance-btn">
+            <span class="material-symbols-outlined">ambulance</span>
+            Book Emergency Ambulance
+          </button>
+        </form>
+      </div>
+      
+      <div class="ambulance-status">
+        <div class="status-header">
+          <h3>Available Ambulances</h3>
+          <div class="status-indicator">
+            <span class="status-dot active"></span>
+            <span>Live Status</span>
+          </div>
+        </div>
+        
+        <div id="ambulance-list" class="ambulance-vehicles">
+          <div class="loading-state">
+            <span class="material-symbols-outlined">hourglass_empty</span>
+            <p>Loading ambulance availability...</p>
+          </div>
+        </div>
+        
+        <div id="booking-confirmation" class="booking-confirmation hidden">
+          <div class="confirmation-header">
+            <span class="material-symbols-outlined">check_circle</span>
+            <h4>Ambulance Dispatched</h4>
+          </div>
+          <div class="confirmation-details">
+            <p>Your ambulance is on the way!</p>
+            <div class="booking-info">
+              <div class="info-item">
+                <span class="label">Booking ID:</span>
+                <span class="value" id="booking-id">-</span>
+              </div>
+              <div class="info-item">
+                <span class="label">ETA:</span>
+                <span class="value" id="booking-eta">-</span>
+              </div>
+              <div class="info-item">
+                <span class="label">Vehicle:</span>
+                <span class="value" id="booking-vehicle">-</span>
+              </div>
+            </div>
+            <button class="track-btn" onclick="trackAmbulance()">
+              <span class="material-symbols-outlined">location_on</span>
+              Track Ambulance
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Blood Bank Page -->
+  <div class="page" id="page-blood">
+    <div class="blood-container">
+      <div class="blood-header">
+        <div class="blood-header-content">
+          <h2>Blood Bank</h2>
+          <p>Find blood donors and check availability across Pune hospitals</p>
+        </div>
+        
+        <div class="blood-search">
+          <select id="blood-group-select" class="blood-select">
+            <option value="">Select Blood Group</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+          </select>
+          <button class="search-blood-btn" onclick="searchBlood()">
+            <span class="material-symbols-outlined">search</span>
+            Search
+          </button>
+        </div>
+      </div>
+      
+      <div class="blood-types-overview">
+        <div class="blood-type-card" onclick="selectBloodType('A+')">
+          <div class="blood-type-label">A+</div>
+          <div class="availability-status">
+            <span class="availability-text">Available</span>
+          </div>
+        </div>
+        <div class="blood-type-card" onclick="selectBloodType('A-')">
+          <div class="blood-type-label">A-</div>
+          <div class="availability-status">
+            <span class="availability-text">Limited</span>
+          </div>
+        </div>
+        <div class="blood-type-card" onclick="selectBloodType('B+')">
+          <div class="blood-type-label">B+</div>
+          <div class="availability-status">
+            <span class="availability-text">Available</span>
+          </div>
+        </div>
+        <div class="blood-type-card" onclick="selectBloodType('B-')">
+          <div class="blood-type-label">B-</div>
+          <div class="availability-status">
+            <span class="availability-text">Critical</span>
+          </div>
+        </div>
+        <div class="blood-type-card" onclick="selectBloodType('AB+')">
+          <div class="blood-type-label">AB+</div>
+          <div class="availability-status">
+            <span class="availability-text">Available</span>
+          </div>
+        </div>
+        <div class="blood-type-card" onclick="selectBloodType('AB-')">
+          <div class="blood-type-label">AB-</div>
+          <div class="availability-status">
+            <span class="availability-text">Limited</span>
+          </div>
+        </div>
+        <div class="blood-type-card" onclick="selectBloodType('O+')">
+          <div class="blood-type-label">O+</div>
+          <div class="availability-status">
+            <span class="availability-text">Available</span>
+          </div>
+        </div>
+        <div class="blood-type-card" onclick="selectBloodType('O-')">
+          <div class="blood-type-label">O-</div>
+          <div class="availability-status">
+            <span class="availability-text">Critical</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="blood-results">
+        <div class="results-header">
+          <h3>Search Results</h3>
+          <div class="results-count" id="results-count">Select a blood group to see availability</div>
+        </div>
+        
+        <div id="blood-banks-list" class="blood-banks-list">
+          <div class="empty-state">
+            <span class="material-symbols-outlined">bloodtype</span>
+            <p>Select a blood group above to find available blood banks</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Global variables
+    let currentLocation = null;
+    let selectedHospital = null;
+    let currentBookingId = null;
+
+    // Mobile Navigation
+    function toggleMobileNav() {
+      const mobileNav = document.getElementById('mobile-nav');
+      mobileNav.classList.toggle('active');
+    }
+
+    function closeMobileNav() {
+      const mobileNav = document.getElementById('mobile-nav');
+      mobileNav.classList.remove('active');
+    }
+
+    // Page navigation
+    function showPage(pageId, navBtn) {
+      // Hide all pages
+      document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+      });
+      
+      // Show selected page
+      document.getElementById('page-' + pageId).classList.add('active');
+      
+      // Update desktop navigation
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      // Update mobile navigation
+      document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      if (navBtn) {
+        navBtn.classList.add('active');
+        // Also update corresponding mobile/desktop nav
+        const isDesktop = navBtn.classList.contains('nav-btn');
+        const isMobile = navBtn.classList.contains('mobile-nav-btn');
+        
+        if (isDesktop) {
+          const mobileIndex = Array.from(document.querySelectorAll('.nav-btn')).indexOf(navBtn);
+          const mobileBtn = document.querySelectorAll('.mobile-nav-btn')[mobileIndex];
+          if (mobileBtn) mobileBtn.classList.add('active');
+        } else if (isMobile) {
+          const desktopIndex = Array.from(document.querySelectorAll('.mobile-nav-btn')).indexOf(navBtn);
+          const desktopBtn = document.querySelectorAll('.nav-btn')[desktopIndex];
+          if (desktopBtn) desktopBtn.classList.add('active');
+        }
+      }
+
+      // Initialize page-specific functionality
+      if (pageId === 'finder') {
+        initializeHospitalFinder();
+      } else if (pageId === 'ambulance') {
+        initializeAmbulanceBooking();
+      } else if (pageId === 'blood') {
+        initializeBloodBank();
+      }
+    }
+
+    // SOS functionality
+    function startSOSFlow() {
+      if (confirm('This will initiate an emergency call. Do you want to continue?')) {
+        // Get current location and trigger SOS
+        getCurrentLocation().then(location => {
+          if (location) {
+            triggerSOS(location);
+          } else {
+            // Fallback to manual SOS
+            alert('Emergency services have been notified. Help is on the way!');
+            window.open('tel:108');
+          }
+        });
+      }
+    }
+
+    // Get current location
+    function getCurrentLocation() {
+      return new Promise((resolve) => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const location = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+              };
+              currentLocation = location;
+              resolve(location);
+            },
+            (error) => {
+              console.error('Error getting location:', error);
+              resolve(null);
+            }
+          );
+        } else {
+          console.error('Geolocation is not supported');
+          resolve(null);
+        }
+      });
+    }
+
+    // Trigger SOS alert
+    async function triggerSOS(location) {
+      try {
+        const response = await fetch('/api/sos', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            latitude: location.latitude,
+            longitude: location.longitude,
+            emergencyType: 'sos',
+            priority: 'critical'
+          })
+        });
+
+        if (response.ok) {
+          alert('Emergency services have been notified. Help is on the way!');
+          window.open('tel:108');
+        } else {
+          throw new Error('Failed to send SOS alert');
+        }
+      } catch (error) {
+        console.error('SOS Error:', error);
+        alert('Emergency services have been notified. Help is on the way!');
+        window.open('tel:108');
+      }
+    }
+
+    let map;
+    let markers = [];
+
+    async function waitForGoogleMaps(retries = 10) {
+      for (let i = 0; i < retries; i++) {
+        if (typeof google !== 'undefined' && google.maps) return true;
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
+      return false;
+    }
+
+    async function initMap(lat, lng) {
+      const isLoaded = await waitForGoogleMaps();
+      if (!isLoaded) {
+        console.error('Google Maps API not loaded');
+        return;
+      }
+      
+      const mapElement = document.getElementById('hospitals-map');
+      if (!mapElement) return;
+
+      const position = { lat, lng };
+      map = new google.maps.Map(mapElement, {
+        center: position,
+        zoom: 13,
+        mapTypeControl: false,
+        streetViewControl: false,
+      });
+
+      // Add user location marker
+      new google.maps.Marker({
+        position,
+        map,
+        title: 'Your Location',
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: 10,
+          fillColor: '#3b82f6',
+          fillOpacity: 1,
+          strokeColor: '#ffffff',
+          strokeWeight: 2,
+        }
+      });
+    }
+
+    function updateMapMarkers(hospitals) {
+      if (!map) return;
+
+      // clear existing markers
+      markers.forEach(marker => marker.setMap(null));
+      markers = [];
+
+      hospitals.forEach(hospital => {
+        if (hospital.latitude && hospital.longitude) {
+          const marker = new google.maps.Marker({
+            position: { lat: hospital.latitude, lng: hospital.longitude },
+            map,
+            title: hospital.name,
+          });
+
+          const infoWindow = new google.maps.InfoWindow({
+            content: `
+              <div style="padding: 10px;">
+                <h4 style="margin:0 0 5px 0;">${hospital.name}</h4>
+                <p style="margin:0 0 5px 0;">${hospital.address}</p>
+                <p style="margin:0;">Distance: ${hospital.distance?.toFixed(1) || 'N/A'} km</p>
+              </div>
+            `
+          });
+
+          marker.addListener('click', () => {
+            infoWindow.open(map, marker);
+          });
+
+          markers.push(marker);
+        }
+      });
+    }
+
+    // Hospital Finder Functions
+    async function initializeHospitalFinder() {
+      const location = await getCurrentLocation();
+      if (location) {
+        await initMap(location.latitude, location.longitude);
+        loadNearbyHospitals(location.latitude, location.longitude);
+      } else {
+        // Use default Pune coordinates
+        await initMap(18.5204, 73.8567);
+        loadNearbyHospitals(18.5204, 73.8567);
+      }
+    }
+
+    async function loadNearbyHospitals(lat, lng) {
+      const hospitalsList = document.getElementById('hospitals-list');
+      
+      try {
+        const response = await fetch(`/api/hospitals?lat=${lat}&lng=${lng}`);
+        const hospitals = await response.json();
+        
+        displayHospitals(hospitals);
+      } catch (error) {
+        console.error('Error loading hospitals:', error);
+        hospitalsList.innerHTML = `
+          <div class="loading-state">
+            <span class="material-symbols-outlined">error</span>
+            <p>Error loading hospitals. Please try again.</p>
+          </div>
+        `;
+      }
+    }
+
+    let allHospitals = [];
+    let currentFilter = 'all';
+
+    function displayHospitals(hospitals) {
+      allHospitals = hospitals;
+      const hospitalsList = document.getElementById('hospitals-list');
+      
+      updateMapMarkers(hospitals);
+      
+      if (hospitals.length === 0) {
+        hospitalsList.innerHTML = `
+          <div class="empty-state">
+            <span class="material-symbols-outlined">local_hospital</span>
+            <p>No hospitals found in your area.</p>
+          </div>
+        `;
+        return;
+      }
+
+      hospitalsList.innerHTML = hospitals.map((hospital, index) => `
+        <div class="hospital-card" onclick="selectHospital(${hospital.id}, ${index})">
+          <div class="hospital-name">${hospital.name}</div>
+          <div class="hospital-address">${hospital.address}</div>
+          <div class="hospital-meta">
+            <div class="hospital-distance">${hospital.distance?.toFixed(1) || 'N/A'} km</div>
+            <div class="hospital-status">
+              <div class="status-dot available"></div>
+              <span>Available</span>
+            </div>
+          </div>
+          <div class="hospital-actions">
+            <button class="hospital-btn call-btn" onclick="event.stopPropagation(); callHospital('${hospital.contactNumber || hospital.phone}')">
+              <span class="material-symbols-outlined">call</span>
+              Call
+            </button>
+            <button class="hospital-btn directions-btn" onclick="event.stopPropagation(); getDirections(${hospital.latitude}, ${hospital.longitude})">
+              <span class="material-symbols-outlined">directions</span>
+              Directions
+            </button>
+          </div>
+        </div>
+      `).join('');
+
+      // Add filter functionality
+      setupFilterChips();
+      setupSearchInput();
+    }
+
+    function setupFilterChips() {
+      const filterChips = document.querySelectorAll('.filter-chip');
+      filterChips.forEach(chip => {
+        chip.addEventListener('click', function() {
+          // Remove active class from all chips
+          filterChips.forEach(c => c.classList.remove('active'));
+          // Add active class to clicked chip
+          this.classList.add('active');
+          
+          currentFilter = this.dataset.filter;
+          filterHospitals();
+        });
+      });
+    }
+
+    function setupSearchInput() {
+      const searchInput = document.getElementById('hospital-search');
+      if (searchInput) {
+        searchInput.addEventListener('input', function() {
+          filterHospitals();
+        });
+      }
+    }
+
+    function filterHospitals() {
+      const searchTerm = document.getElementById('hospital-search')?.value.toLowerCase() || '';
+      let filteredHospitals = allHospitals;
+
+      // Filter by search term
+      if (searchTerm) {
+        filteredHospitals = filteredHospitals.filter(hospital => 
+          hospital.name.toLowerCase().includes(searchTerm) ||
+          hospital.address.toLowerCase().includes(searchTerm)
+        );
+      }
+
+      // Filter by specialty (simplified - in real app would check hospital specialties)
+      if (currentFilter !== 'all') {
+        // This is a simplified filter - in real implementation, 
+        // hospitals would have specialty data
+        filteredHospitals = filteredHospitals.filter(hospital => {
+          const name = hospital.name.toLowerCase();
+          switch(currentFilter) {
+            case 'emergency':
+              return name.includes('emergency') || name.includes('trauma');
+            case 'cardiology':
+              return name.includes('heart') || name.includes('cardiac');
+            case 'neurology':
+              return name.includes('neuro') || name.includes('brain');
+            case 'orthopedic':
+              return name.includes('ortho') || name.includes('bone');
+            default:
+              return true;
+          }
+        });
+      }
+
+      // Update display
+      const hospitalsList = document.getElementById('hospitals-list');
+      
+      updateMapMarkers(filteredHospitals);
+      
+      if (filteredHospitals.length === 0) {
+        hospitalsList.innerHTML = `
+          <div class="empty-state">
+            <span class="material-symbols-outlined">search_off</span>
+            <p>No hospitals match your search criteria.</p>
+          </div>
+        `;
+      } else {
+        hospitalsList.innerHTML = filteredHospitals.map((hospital, index) => `
+          <div class="hospital-card" onclick="selectHospital(${hospital.id}, ${index})">
+            <div class="hospital-name">${hospital.name}</div>
+            <div class="hospital-address">${hospital.address}</div>
+            <div class="hospital-meta">
+              <div class="hospital-distance">${hospital.distance?.toFixed(1) || 'N/A'} km</div>
+              <div class="hospital-status">
+                <div class="status-dot available"></div>
+                <span>Available</span>
+              </div>
+            </div>
+            <div class="hospital-actions">
+              <button class="hospital-btn call-btn" onclick="event.stopPropagation(); callHospital('${hospital.contactNumber || hospital.phone}')">
+                <span class="material-symbols-outlined">call</span>
+                Call
+              </button>
+              <button class="hospital-btn directions-btn" onclick="event.stopPropagation(); getDirections(${hospital.latitude}, ${hospital.longitude})">
+                <span class="material-symbols-outlined">directions</span>
+                Directions
+              </button>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    function selectHospital(hospitalId, index) {
+      // Remove previous selection
+      document.querySelectorAll('.hospital-card').forEach(card => {
+        card.classList.remove('selected');
+      });
+      
+      // Add selection to clicked card
+      if (event && event.currentTarget) {
+        event.currentTarget.classList.add('selected');
+      }
+      selectedHospital = hospitalId;
+      
+      // Show hospital details (could expand this feature)
+      console.log('Selected hospital:', hospitalId);
+    }
+
+    function callHospital(phoneNumber) {
+      if (phoneNumber && phoneNumber !== 'undefined' && phoneNumber !== 'null') {
+        // Clean phone number
+        const cleanNumber = phoneNumber.replace(/[^\d+\-\s()]/g, '');
+        if (cleanNumber) {
+          window.open(`tel:${cleanNumber}`);
+        } else {
+          showNotification('Phone number not available', 'error');
+        }
+      } else {
+        showNotification('Phone number not available', 'error');
+      }
+    }
+
+    function getDirections(lat, lng) {
+      if (lat && lng && !isNaN(lat) && !isNaN(lng)) {
+        const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+        window.open(url, '_blank');
+      } else {
+        showNotification('Location not available', 'error');
+      }
+    }
+
+    // Notification system
+    function showNotification(message, type = 'info') {
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.className = `notification notification-${type}`;
+      notification.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <span class="material-symbols-outlined">
+            ${type === 'error' ? 'error' : type === 'success' ? 'check_circle' : 'info'}
+          </span>
+          <span>${message}</span>
+        </div>
+      `;
+      
+      // Style the notification
+      Object.assign(notification.style, {
+        position: 'fixed',
+        top: '5rem',
+        right: '1rem',
+        background: type === 'error' ? 'var(--primary)' : type === 'success' ? 'var(--secondary)' : 'var(--accent)',
+        color: 'white',
+        padding: '1rem 1.5rem',
+        borderRadius: 'var(--radius-lg)',
+        boxShadow: 'var(--shadow-lg)',
+        zIndex: '1000',
+        animation: 'slideIn 0.3s ease',
+        maxWidth: '300px'
+      });
+      
+      document.body.appendChild(notification);
+      
+      // Remove after 3 seconds
+      setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => {
+          if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+          }
+        }, 300);
+      }, 3000);
+    }
+
+    function getCurrentLocationForBooking() {
+      getCurrentLocation().then(location => {
+        if (location) {
+          document.getElementById('location-text').value = `Current Location (${location.latitude.toFixed(4)}, ${location.longitude.toFixed(4)})`;
+        } else {
+          alert('Unable to get current location. Please enter address manually.');
+        }
+      });
+    }
+
+    // Ambulance Booking Functions
+    async function initializeAmbulanceBooking() {
+      const location = await getCurrentLocation();
+      if (location) {
+        loadNearbyAmbulances(location.latitude, location.longitude);
+      }
+    }
+
+    async function loadNearbyAmbulances(lat, lng) {
+      const ambulanceList = document.getElementById('ambulance-list');
+      
+      try {
+        const response = await fetch(`/api/ambulance/nearby?lat=${lat}&lng=${lng}&limit=10`);
+        const ambulances = await response.json();
+        
+        displayAmbulances(ambulances);
+      } catch (error) {
+        console.error('Error loading ambulances:', error);
+        ambulanceList.innerHTML = `
+          <div class="loading-state">
+            <span class="material-symbols-outlined">error</span>
+            <p>Error loading ambulances. Please try again.</p>
+          </div>
+        `;
+      }
+    }
+
+    function displayAmbulances(ambulances) {
+      const ambulanceList = document.getElementById('ambulance-list');
+      
+      if (ambulances.length === 0) {
+        ambulanceList.innerHTML = `
+          <div class="empty-state">
+            <span class="material-symbols-outlined">ambulance</span>
+            <p>No ambulances available in your area.</p>
+          </div>
+        `;
+        return;
+      }
+
+      ambulanceList.innerHTML = ambulances.map(ambulance => `
+        <div class="ambulance-vehicle ${ambulance.status}">
+          <div class="vehicle-header">
+            <div class="vehicle-id">${ambulance.vehicleId}</div>
+            <div class="vehicle-status ${ambulance.status}">${ambulance.status}</div>
+          </div>
+          <div class="vehicle-info">
+            Driver: ${ambulance.driverName || 'N/A'}<br>
+            Hospital: ${ambulance.hospital?.name || 'N/A'}
+          </div>
+          <div class="vehicle-eta">ETA: ${ambulance.etaMinutes} minutes</div>
+        </div>
+      `).join('');
+    }
+
+    // Handle ambulance booking form submission
+    document.addEventListener('DOMContentLoaded', function() {
+      const bookingForm = document.getElementById('ambulance-booking-form');
+      if (bookingForm) {
+        bookingForm.addEventListener('submit', handleAmbulanceBooking);
+      }
+    });
+
+    async function handleAmbulanceBooking(event) {
+      event.preventDefault();
+      
+      const formData = new FormData(event.target);
+      const bookingData = {
+        emergencyType: formData.get('emergencyType'),
+        patientName: formData.get('patientName'),
+        patientPhone: formData.get('patientPhone'),
+        locationText: formData.get('locationText'),
+        incidentDescription: formData.get('incidentDescription'),
+        priority: 'critical'
+      };
+
+      // Add location coordinates if available
+      if (currentLocation) {
+        bookingData.latitude = currentLocation.latitude;
+        bookingData.longitude = currentLocation.longitude;
+      }
+
+      try {
+        const response = await fetch('/api/ambulance/book', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(bookingData)
+        });
+
+        const result = await response.json();
+        
+        if (response.ok && result.bookingId) {
+          showBookingConfirmation(result);
+        } else {
+          alert(result.message || 'Failed to book ambulance. Please try again.');
+        }
+      } catch (error) {
+        console.error('Booking error:', error);
+        alert('Failed to book ambulance. Please try again.');
+      }
+    }
+
+    function showBookingConfirmation(bookingData) {
+      const confirmationDiv = document.getElementById('booking-confirmation');
+      
+      document.getElementById('booking-id').textContent = bookingData.bookingId;
+      document.getElementById('booking-eta').textContent = bookingData.eta || 'N/A';
+      document.getElementById('booking-vehicle').textContent = bookingData.ambulance?.vehicleId || 'N/A';
+      
+      confirmationDiv.classList.remove('hidden');
+      currentBookingId = bookingData.bookingId;
+    }
+
+    function trackAmbulance() {
+      if (currentBookingId) {
+        // In a real implementation, this would open a tracking interface
+        alert(`Tracking ambulance for booking ID: ${currentBookingId}`);
+      }
+    }
+
+    // Blood Bank Functions
+    function initializeBloodBank() {
+      // Initialize blood bank page
+      console.log('Blood bank page initialized');
+    }
+
+    async function searchBlood() {
+      const bloodGroup = document.getElementById('blood-group-select').value;
+      
+      if (!bloodGroup) {
+        alert('Please select a blood group');
+        return;
+      }
+
+      await loadBloodBanks(bloodGroup);
+    }
+
+    async function selectBloodType(bloodGroup) {
+      // Update visual selection
+      document.querySelectorAll('.blood-type-card').forEach(card => {
+        card.classList.remove('selected');
+      });
+      event.currentTarget.classList.add('selected');
+      
+      // Update dropdown
+      document.getElementById('blood-group-select').value = bloodGroup;
+      
+      // Load blood banks
+      await loadBloodBanks(bloodGroup);
+    }
+
+    async function loadBloodBanks(bloodGroup) {
+      const bloodBanksList = document.getElementById('blood-banks-list');
+      const resultsCount = document.getElementById('results-count');
+      
+      bloodBanksList.innerHTML = `
+        <div class="loading-state">
+          <span class="material-symbols-outlined">hourglass_empty</span>
+          <p>Searching blood banks...</p>
+        </div>
+      `;
+
+      try {
+        const response = await fetch(`/api/blood/${bloodGroup}`);
+        const bloodBanks = await response.json();
+        
+        displayBloodBanks(bloodBanks, bloodGroup);
+      } catch (error) {
+        console.error('Error loading blood banks:', error);
+        bloodBanksList.innerHTML = `
+          <div class="loading-state">
+            <span class="material-symbols-outlined">error</span>
+            <p>Error loading blood banks. Please try again.</p>
+          </div>
+        `;
+      }
+    }
+
+    function displayBloodBanks(bloodBanks, bloodGroup) {
+      const bloodBanksList = document.getElementById('blood-banks-list');
+      const resultsCount = document.getElementById('results-count');
+      
+      resultsCount.textContent = `${bloodBanks.length} blood banks found for ${bloodGroup}`;
+      
+      if (bloodBanks.length === 0) {
+        bloodBanksList.innerHTML = `
+          <div class="empty-state">
+            <span class="material-symbols-outlined">bloodtype</span>
+            <p>No blood banks found with ${bloodGroup} blood available.</p>
+          </div>
+        `;
+        return;
+      }
+
+      bloodBanksList.innerHTML = bloodBanks.map(bank => `
+        <div class="blood-bank-card">
+          <div class="bank-header">
+            <div>
+              <div class="bank-name">${bank.hospital?.name || 'Unknown Hospital'}</div>
+              <div class="bank-hospital">${bank.hospital?.address || 'Address not available'}</div>
+            </div>
+            <div class="units-available">
+              <div class="units-count">${bank.availableUnits}</div>
+              <div class="units-label">units available</div>
+            </div>
+          </div>
+          <div class="bank-contact">
+            <div class="contact-info">
+              Contact: ${bank.hospital?.contactNumber || 'N/A'}
+            </div>
+            <button class="contact-btn" onclick="callBloodBank('${bank.hospital?.contactNumber}')">
+              <span class="material-symbols-outlined">call</span>
+              Call Now
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function callBloodBank(phoneNumber) {
+      if (phoneNumber && phoneNumber !== 'N/A') {
+        window.open(`tel:${phoneNumber}`);
+      } else {
+        alert('Phone number not available');
+      }
+    }
+
+    // Initialize the application
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('PuneEmergency application initialized');
+      
+      // Initialize home page by default
+      getCurrentLocation().then(location => {
+        if (location) {
+          console.log('Current location:', location);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
