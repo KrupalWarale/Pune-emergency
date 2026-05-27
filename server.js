@@ -12,6 +12,7 @@ const BloodBank = require('./models/BloodBank');
 const Patient = require('./models/Patient');
 const User = require('./models/User');
 const UserActivity = require('./models/UserActivity');
+const AppReview = require('./models/AppReview');
 const { ensureEmergencyInventory } = require('./utils/bootstrapInventory');
 const { ensureBookingSchema } = require('./utils/ensureSchema');
 
@@ -64,6 +65,7 @@ app.use('/api/ambulance', require('./routes/ambulances'));
 app.use('/api/blood', require('./routes/blood'));
 app.use('/api/patient', require('./routes/patients'));
 app.use('/api/sos', require('./routes/sos'));
+app.use('/api/reviews', require('./routes/reviews'));
 
 // Authentication and dashboard routes
 const { router: authRouter } = require('./routes/auth');
