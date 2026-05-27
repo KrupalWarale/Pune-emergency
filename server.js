@@ -94,12 +94,21 @@ sequelize.sync()
     await ensureBookingSchema(sequelize);
     await ensureEmergencyInventory();
     console.log('✅ Supabase database connected and synced');
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
-      console.log(`🌐 Open in browser: \x1b]8;;http://localhost:${PORT}\x1b\\http://localhost:${PORT}\x1b]8;;\x1b\\`);
-    });
+    
+    // Only start listening locally. Vercel will use the exported app.
+    if (process.env.NODE_ENV !== 'production') {
+      app.listen(PORT, () => {
+        console.log(`🚀 Server running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
+        console.log(`🌐 Open in browser: \x1b]8;;http://localhost:${PORT}\x1b\\http://localhost:${PORT}\x1b]8;;\x1b\\`);
+      });
+    }
   })
   .catch(err => {
     console.error('❌ Database connection error:', err);
-    process.exit(1);
+    if (process.env.NODE_ENV !== 'production') {
+      process.exit(1);
+    }
   });
+
+// Export the app for Vercel Serverless
+module.exports = app;
