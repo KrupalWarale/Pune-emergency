@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -7,10 +8,15 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>PuneEmergency — Emergency Medical Services</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
-  <script src="https://maps.googleapis.com/maps/api/js?key=%GOOGLE_MAPS_API_KEY%&loading=async&libraries=places,geometry,marker&v=beta" defer></script>
-  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    rel="stylesheet">
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=%GOOGLE_MAPS_API_KEY%&loading=async&libraries=places,geometry,marker&v=beta"
+    defer></script>
+
   <style>
     :root {
       /* Modern Color Palette */
@@ -21,7 +27,7 @@
       --secondary-light: #ecfdf5;
       --accent: #3b82f6;
       --accent-light: #eff6ff;
-      
+
       /* Neutrals */
       --white: #ffffff;
       --gray-50: #f9fafb;
@@ -34,13 +40,13 @@
       --gray-700: #374151;
       --gray-800: #1f2937;
       --gray-900: #111827;
-      
+
       /* Shadows */
       --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
       --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
       --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
       --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-      
+
       /* Border Radius */
       --radius-sm: 0.375rem;
       --radius-md: 0.5rem;
@@ -104,8 +110,17 @@
     }
 
     @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(1.2); }
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.5;
+        transform: scale(1.2);
+      }
     }
 
     .nav-links {
@@ -306,8 +321,14 @@
     }
 
     @keyframes ping {
-      0% { box-shadow: 0 0 0 8px rgba(220, 38, 38, 0.2); }
-      75%, 100% { box-shadow: 0 0 0 20px rgba(220, 38, 38, 0); }
+      0% {
+        box-shadow: 0 0 0 8px rgba(220, 38, 38, 0.2);
+      }
+
+      75%,
+      100% {
+        box-shadow: 0 0 0 20px rgba(220, 38, 38, 0);
+      }
     }
 
     /* Services Section */
@@ -883,8 +904,21 @@
     }
 
     /* Utility Classes */
-    .hidden { display: none !important; }
-    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    .hidden {
+      display: none !important;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
 
     /* Hospital Finder Styles */
     .finder-container {
@@ -1235,16 +1269,16 @@
       color: var(--gray-600);
     }
 
-    .emergency-type input:checked + .emergency-card {
+    .emergency-type input:checked+.emergency-card {
       border-color: var(--primary);
       background: var(--primary-light);
     }
 
-    .emergency-type input:checked + .emergency-card .material-symbols-outlined {
+    .emergency-type input:checked+.emergency-card .material-symbols-outlined {
       color: var(--primary);
     }
 
-    .emergency-type input:checked + .emergency-card span:last-child {
+    .emergency-type input:checked+.emergency-card span:last-child {
       color: var(--primary);
     }
 
@@ -1766,29 +1800,36 @@
     }
 
     @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     @keyframes slideIn {
-      from { 
-        transform: translateX(100%); 
-        opacity: 0; 
+      from {
+        transform: translateX(100%);
+        opacity: 0;
       }
-      to { 
-        transform: translateX(0); 
-        opacity: 1; 
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
       }
     }
 
     @keyframes slideOut {
-      from { 
-        transform: translateX(0); 
-        opacity: 1; 
+      from {
+        transform: translateX(0);
+        opacity: 1;
       }
-      to { 
-        transform: translateX(100%); 
-        opacity: 0; 
+
+      to {
+        transform: translateX(100%);
+        opacity: 0;
       }
     }
 
@@ -1834,7 +1875,141 @@
       outline-offset: 2px;
     }
 
-    /* Loading states */
+    /* App Download Page Styles */
+    .app-container {
+      padding: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .app-header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: var(--white);
+      padding: 3rem 2rem;
+      border-radius: var(--radius-xl);
+      text-align: center;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .app-header h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+
+    .app-header p {
+      font-size: 1.125rem;
+      opacity: 0.9;
+    }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 2rem;
+      background: var(--white);
+      color: var(--primary);
+      border: none;
+      border-radius: var(--radius-lg);
+      font-weight: 700;
+      font-size: 1.125rem;
+      cursor: pointer;
+      text-decoration: none;
+      margin-top: 1.5rem;
+      box-shadow: var(--shadow-md);
+      transition: all 0.2s ease;
+    }
+
+    .download-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+      color: var(--primary-dark);
+    }
+
+    .review-section {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      padding: 2.5rem;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 2rem;
+    }
+
+    .review-section h3 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 1.5rem;
+    }
+
+    .rating-group {
+      display: flex;
+      gap: 0.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .star-btn {
+      background: none;
+      border: none;
+      color: var(--gray-300);
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .star-btn .material-symbols-outlined {
+      font-size: 2.5rem;
+      font-variation-settings: 'FILL' 1;
+    }
+
+    .star-btn.active,
+    .star-btn.hover {
+      color: #fbbf24;
+    }
+
+    .reviews-list {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .review-card {
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      background: var(--gray-50);
+    }
+
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .review-author {
+      font-weight: 600;
+      color: var(--gray-900);
+      font-size: 1.125rem;
+    }
+
+    .review-rating {
+      color: #fbbf24;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .review-rating .material-symbols-outlined {
+      font-size: 1.25rem;
+      font-variation-settings: 'FILL' 1;
+    }
+
+    .review-text {
+      color: var(--gray-700);
+      line-height: 1.6;
+    }
+
     .loading {
       position: relative;
       pointer-events: none;
@@ -1864,7 +2039,7 @@
         <div class="pulse-indicator"></div>
         PuneEmergency
       </a>
-      
+
       <div class="nav-links">
         <button class="nav-btn active" onclick="showPage('home', this)">
           <span class="material-symbols-outlined">home</span>
@@ -1881,6 +2056,10 @@
         <button class="nav-btn" onclick="showPage('blood', this)">
           <span class="material-symbols-outlined">bloodtype</span>
           Blood Bank
+        </button>
+        <button class="nav-btn" onclick="showPage('app', this)">
+          <span class="material-symbols-outlined">download</span>
+          Get App
         </button>
       </div>
 
@@ -1915,9 +2094,13 @@
         <span class="material-symbols-outlined">bloodtype</span>
         Blood Bank
       </button>
+      <button class="mobile-nav-btn" onclick="showPage('app', this); closeMobileNav()">
+        <span class="material-symbols-outlined">download</span>
+        Get App
+      </button>
     </div>
   </div>
-    </div>
+  </div>
   </nav>
 
   <!-- Home Page -->
@@ -1927,8 +2110,9 @@
       <div class="hero-container">
         <div class="hero-content">
           <h1>Emergency help, seconds away</h1>
-          <p>Find nearest hospitals, book ambulances instantly, and get critical help fast — built exclusively for Pune district residents.</p>
-          
+          <p>Find nearest hospitals, book ambulances instantly, and get critical help fast — built exclusively for Pune
+            district residents.</p>
+
           <div class="hero-actions">
             <button class="btn-primary" onclick="showPage('finder', document.querySelectorAll('.nav-btn')[1])">
               <span class="material-symbols-outlined">search</span>
@@ -1940,7 +2124,7 @@
             </button>
           </div>
         </div>
-        
+
         <div class="hero-visual">
           <div class="map-preview">
             <div class="map-grid"></div>
@@ -1955,9 +2139,10 @@
       <div class="services-container">
         <div class="section-header">
           <h2>Emergency Services</h2>
-          <p>Comprehensive medical emergency services designed to save lives and provide immediate care when you need it most.</p>
+          <p>Comprehensive medical emergency services designed to save lives and provide immediate care when you need it
+            most.</p>
         </div>
-        
+
         <div class="services-grid">
           <div class="service-card" onclick="showPage('finder', document.querySelectorAll('.nav-btn')[1])">
             <div class="service-icon">
@@ -1966,7 +2151,7 @@
             <h3>Hospital Finder</h3>
             <p>Locate the nearest hospitals with real-time availability, specialties, and contact information.</p>
           </div>
-          
+
           <div class="service-card" onclick="showPage('ambulance', document.querySelectorAll('.nav-btn')[2])">
             <div class="service-icon">
               <span class="material-symbols-outlined">ambulance</span>
@@ -1974,7 +2159,7 @@
             <h3>Ambulance Booking</h3>
             <p>Book emergency ambulances with GPS tracking and direct communication with medical staff.</p>
           </div>
-          
+
           <div class="service-card" onclick="showPage('blood', document.querySelectorAll('.nav-btn')[3])">
             <div class="service-icon">
               <span class="material-symbols-outlined">bloodtype</span>
@@ -2003,8 +2188,9 @@
             <p>Ambulances Available</p>
           </div>
           <div class="stat-item">
-            <h3>< 5min</h3>
-            <p>Average Response Time</p>
+            <h3>
+              < 5min</h3>
+                <p>Average Response Time</p>
           </div>
         </div>
       </div>
@@ -2039,13 +2225,13 @@
           <h2>Find Hospitals</h2>
           <p>Locate nearby hospitals with real-time availability</p>
         </div>
-        
+
         <div class="search-section">
           <div class="search-input-group">
             <span class="material-symbols-outlined">search</span>
             <input type="text" id="hospital-search" placeholder="Search hospitals..." class="search-input">
           </div>
-          
+
           <div class="filter-section">
             <h4>Specialties</h4>
             <div class="filter-chips">
@@ -2057,7 +2243,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="hospitals-list" id="hospitals-list">
           <div class="loading-state">
             <span class="material-symbols-outlined">hourglass_empty</span>
@@ -2065,7 +2251,7 @@
           </div>
         </div>
       </div>
-      
+
       <div class="finder-map">
         <div id="hospitals-map" class="map-container">
           <div class="map-placeholder">
@@ -2073,7 +2259,7 @@
             <p>Map will load here</p>
           </div>
         </div>
-        
+
         <div class="map-controls">
           <button class="map-control-btn" onclick="getCurrentLocation()">
             <span class="material-symbols-outlined">my_location</span>
@@ -2092,7 +2278,7 @@
           <h2>Book Ambulance</h2>
           <p>Emergency ambulance booking with real-time tracking</p>
         </div>
-        
+
         <form id="ambulance-booking-form" class="booking-form">
           <div class="form-section">
             <h4>Emergency Type</h4>
@@ -2120,7 +2306,7 @@
               </label>
             </div>
           </div>
-          
+
           <div class="form-section">
             <h4>Patient Information</h4>
             <div class="form-grid">
@@ -2134,34 +2320,36 @@
               </div>
             </div>
           </div>
-          
+
           <div class="form-section">
             <h4>Location</h4>
             <div class="form-group">
               <label for="location-text">Address</label>
-              <textarea id="location-text" name="locationText" placeholder="Enter pickup address..." required></textarea>
+              <textarea id="location-text" name="locationText" placeholder="Enter pickup address..."
+                required></textarea>
             </div>
             <button type="button" class="location-btn" onclick="getCurrentLocationForBooking()">
               <span class="material-symbols-outlined">my_location</span>
               Use Current Location
             </button>
           </div>
-          
+
           <div class="form-section">
             <h4>Additional Details</h4>
             <div class="form-group">
               <label for="incident-description">Incident Description</label>
-              <textarea id="incident-description" name="incidentDescription" placeholder="Brief description of the emergency..."></textarea>
+              <textarea id="incident-description" name="incidentDescription"
+                placeholder="Brief description of the emergency..."></textarea>
             </div>
           </div>
-          
+
           <button type="submit" class="book-ambulance-btn">
             <span class="material-symbols-outlined">ambulance</span>
             Book Emergency Ambulance
           </button>
         </form>
       </div>
-      
+
       <div class="ambulance-status">
         <div class="status-header">
           <h3>Available Ambulances</h3>
@@ -2170,14 +2358,14 @@
             <span>Live Status</span>
           </div>
         </div>
-        
+
         <div id="ambulance-list" class="ambulance-vehicles">
           <div class="loading-state">
             <span class="material-symbols-outlined">hourglass_empty</span>
             <p>Loading ambulance availability...</p>
           </div>
         </div>
-        
+
         <div id="booking-confirmation" class="booking-confirmation hidden">
           <div class="confirmation-header">
             <span class="material-symbols-outlined">check_circle</span>
@@ -2217,7 +2405,7 @@
           <h2>Blood Bank</h2>
           <p>Find blood donors and check availability across Pune hospitals</p>
         </div>
-        
+
         <div class="blood-search">
           <select id="blood-group-select" class="blood-select">
             <option value="">Select Blood Group</option>
@@ -2236,7 +2424,7 @@
           </button>
         </div>
       </div>
-      
+
       <div class="blood-types-overview">
         <div class="blood-type-card" onclick="selectBloodType('A+')">
           <div class="blood-type-label">A+</div>
@@ -2287,17 +2475,84 @@
           </div>
         </div>
       </div>
-      
+
       <div class="blood-results">
         <div class="results-header">
           <h3>Search Results</h3>
           <div class="results-count" id="results-count">Select a blood group to see availability</div>
         </div>
-        
+
         <div id="blood-banks-list" class="blood-banks-list">
           <div class="empty-state">
             <span class="material-symbols-outlined">bloodtype</span>
             <p>Select a blood group above to find available blood banks</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- App Download Page -->
+  <div class="page" id="page-app">
+    <div class="app-container">
+      <div class="app-header">
+        <h2>Download PuneEmergency App</h2>
+        <p>Get the official mobile app for faster access to emergency services, live tracking, and offline support.</p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem;">
+          <a href="https://expo.dev/accounts/lazerwave/projects/pune-emergency/builds/509eb74a-423b-4c61-8969-0af061259456"
+            class="download-btn" target="_blank"
+            style="margin-top: 0; background: var(--gray-900); color: var(--white);">
+            <span class="material-symbols-outlined">cloud_download</span>
+            Download from Expo
+          </a>
+
+        </div>
+      </div>
+
+      <div class="review-section">
+        <h3>Rate & Review</h3>
+        <form id="app-review-form">
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label>Your Rating</label>
+            <div class="rating-group" id="star-rating">
+              <button type="button" class="star-btn" data-rating="1"><span
+                  class="material-symbols-outlined">star</span></button>
+              <button type="button" class="star-btn" data-rating="2"><span
+                  class="material-symbols-outlined">star</span></button>
+              <button type="button" class="star-btn" data-rating="3"><span
+                  class="material-symbols-outlined">star</span></button>
+              <button type="button" class="star-btn" data-rating="4"><span
+                  class="material-symbols-outlined">star</span></button>
+              <button type="button" class="star-btn" data-rating="5"><span
+                  class="material-symbols-outlined">star</span></button>
+            </div>
+            <input type="hidden" name="rating" id="rating-value" required>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label for="review-name">Your Name</label>
+            <input type="text" id="review-name" name="name" required placeholder="John Doe">
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1.5rem;">
+            <label for="review-text">Your Review</label>
+            <textarea id="review-text" name="review" required
+              placeholder="Tell us what you think about the app..."></textarea>
+          </div>
+
+          <button type="submit" class="book-ambulance-btn">
+            <span class="material-symbols-outlined">send</span>
+            Submit Review
+          </button>
+        </form>
+      </div>
+
+      <div class="review-section">
+        <h3>Recent Reviews</h3>
+        <div id="reviews-list" class="reviews-list">
+          <div class="loading-state">
+            <span class="material-symbols-outlined">hourglass_empty</span>
+            <p>Loading reviews...</p>
           </div>
         </div>
       </div>
@@ -2327,26 +2582,26 @@
       document.querySelectorAll('.page').forEach(page => {
         page.classList.remove('active');
       });
-      
+
       // Show selected page
       document.getElementById('page-' + pageId).classList.add('active');
-      
+
       // Update desktop navigation
       document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.classList.remove('active');
       });
-      
+
       // Update mobile navigation
       document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
         btn.classList.remove('active');
       });
-      
+
       if (navBtn) {
         navBtn.classList.add('active');
         // Also update corresponding mobile/desktop nav
         const isDesktop = navBtn.classList.contains('nav-btn');
         const isMobile = navBtn.classList.contains('mobile-nav-btn');
-        
+
         if (isDesktop) {
           const mobileIndex = Array.from(document.querySelectorAll('.nav-btn')).indexOf(navBtn);
           const mobileBtn = document.querySelectorAll('.mobile-nav-btn')[mobileIndex];
@@ -2365,6 +2620,8 @@
         initializeAmbulanceBooking();
       } else if (pageId === 'blood') {
         initializeBloodBank();
+      } else if (pageId === 'app') {
+        initializeAppPage();
       }
     }
 
@@ -2455,7 +2712,7 @@
         console.error('Google Maps API not loaded');
         return;
       }
-      
+
       const mapElement = document.getElementById('hospitals-map');
       if (!mapElement) return;
 
@@ -2532,11 +2789,11 @@
 
     async function loadNearbyHospitals(lat, lng) {
       const hospitalsList = document.getElementById('hospitals-list');
-      
+
       try {
         const response = await fetch(`/api/hospitals?lat=${lat}&lng=${lng}`);
         const hospitals = await response.json();
-        
+
         displayHospitals(hospitals);
       } catch (error) {
         console.error('Error loading hospitals:', error);
@@ -2555,9 +2812,9 @@
     function displayHospitals(hospitals) {
       allHospitals = hospitals;
       const hospitalsList = document.getElementById('hospitals-list');
-      
+
       updateMapMarkers(hospitals);
-      
+
       if (hospitals.length === 0) {
         hospitalsList.innerHTML = `
           <div class="empty-state">
@@ -2600,12 +2857,12 @@
     function setupFilterChips() {
       const filterChips = document.querySelectorAll('.filter-chip');
       filterChips.forEach(chip => {
-        chip.addEventListener('click', function() {
+        chip.addEventListener('click', function () {
           // Remove active class from all chips
           filterChips.forEach(c => c.classList.remove('active'));
           // Add active class to clicked chip
           this.classList.add('active');
-          
+
           currentFilter = this.dataset.filter;
           filterHospitals();
         });
@@ -2615,7 +2872,7 @@
     function setupSearchInput() {
       const searchInput = document.getElementById('hospital-search');
       if (searchInput) {
-        searchInput.addEventListener('input', function() {
+        searchInput.addEventListener('input', function () {
           filterHospitals();
         });
       }
@@ -2627,7 +2884,7 @@
 
       // Filter by search term
       if (searchTerm) {
-        filteredHospitals = filteredHospitals.filter(hospital => 
+        filteredHospitals = filteredHospitals.filter(hospital =>
           hospital.name.toLowerCase().includes(searchTerm) ||
           hospital.address.toLowerCase().includes(searchTerm)
         );
@@ -2639,7 +2896,7 @@
         // hospitals would have specialty data
         filteredHospitals = filteredHospitals.filter(hospital => {
           const name = hospital.name.toLowerCase();
-          switch(currentFilter) {
+          switch (currentFilter) {
             case 'emergency':
               return name.includes('emergency') || name.includes('trauma');
             case 'cardiology':
@@ -2656,9 +2913,9 @@
 
       // Update display
       const hospitalsList = document.getElementById('hospitals-list');
-      
+
       updateMapMarkers(filteredHospitals);
-      
+
       if (filteredHospitals.length === 0) {
         hospitalsList.innerHTML = `
           <div class="empty-state">
@@ -2698,13 +2955,13 @@
       document.querySelectorAll('.hospital-card').forEach(card => {
         card.classList.remove('selected');
       });
-      
+
       // Add selection to clicked card
       if (event && event.currentTarget) {
         event.currentTarget.classList.add('selected');
       }
       selectedHospital = hospitalId;
-      
+
       // Show hospital details (could expand this feature)
       console.log('Selected hospital:', hospitalId);
     }
@@ -2750,7 +3007,7 @@
           <span>${message}</span>
         </div>
       `;
-      
+
       // Style the notification
       Object.assign(notification.style, {
         position: 'fixed',
@@ -2765,9 +3022,9 @@
         animation: 'slideIn 0.3s ease',
         maxWidth: '300px'
       });
-      
+
       document.body.appendChild(notification);
-      
+
       // Remove after 3 seconds
       setTimeout(() => {
         notification.style.animation = 'slideOut 0.3s ease';
@@ -2802,7 +3059,7 @@
 
     async function loadNearbyAmbulances(lat, lng) {
       const ambulanceList = document.getElementById('ambulance-list');
-      
+
       const dummyAmbulances = [
         {
           vehicleId: 'PUN-AMB-01',
@@ -2833,12 +3090,12 @@
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         let ambulances = await response.json();
-        
+
         // If API returns no ambulances, load dummy ones anyway
         if (!Array.isArray(ambulances) || ambulances.length === 0) {
           ambulances = dummyAmbulances;
         }
-        
+
         displayAmbulances(ambulances);
       } catch (error) {
         console.error('Error loading ambulances, loading dummies instead:', error);
@@ -2848,7 +3105,7 @@
 
     function displayAmbulances(ambulances) {
       const ambulanceList = document.getElementById('ambulance-list');
-      
+
       if (!Array.isArray(ambulances) || ambulances.length === 0) {
         ambulanceList.innerHTML = `
           <div class="empty-state">
@@ -2875,7 +3132,7 @@
     }
 
     // Handle ambulance booking form submission
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       const bookingForm = document.getElementById('ambulance-booking-form');
       if (bookingForm) {
         bookingForm.addEventListener('submit', handleAmbulanceBooking);
@@ -2884,7 +3141,7 @@
 
     async function handleAmbulanceBooking(event) {
       event.preventDefault();
-      
+
       const formData = new FormData(event.target);
       const bookingData = {
         emergencyType: formData.get('emergencyType'),
@@ -2911,7 +3168,7 @@
         });
 
         const result = await response.json();
-        
+
         if (response.ok && result.bookingId) {
           showBookingConfirmation(result);
         } else {
@@ -2925,11 +3182,11 @@
 
     function showBookingConfirmation(bookingData) {
       const confirmationDiv = document.getElementById('booking-confirmation');
-      
+
       document.getElementById('booking-id').textContent = bookingData.bookingId;
       document.getElementById('booking-eta').textContent = bookingData.eta || 'N/A';
       document.getElementById('booking-vehicle').textContent = bookingData.ambulance?.vehicleId || 'N/A';
-      
+
       confirmationDiv.classList.remove('hidden');
       currentBookingId = bookingData.bookingId;
     }
@@ -2949,7 +3206,7 @@
 
     async function searchBlood() {
       const bloodGroup = document.getElementById('blood-group-select').value;
-      
+
       if (!bloodGroup) {
         alert('Please select a blood group');
         return;
@@ -2964,10 +3221,10 @@
         card.classList.remove('selected');
       });
       event.currentTarget.classList.add('selected');
-      
+
       // Update dropdown
       document.getElementById('blood-group-select').value = bloodGroup;
-      
+
       // Load blood banks
       await loadBloodBanks(bloodGroup);
     }
@@ -2975,7 +3232,7 @@
     async function loadBloodBanks(bloodGroup) {
       const bloodBanksList = document.getElementById('blood-banks-list');
       const resultsCount = document.getElementById('results-count');
-      
+
       bloodBanksList.innerHTML = `
         <div class="loading-state">
           <span class="material-symbols-outlined">hourglass_empty</span>
@@ -2986,7 +3243,7 @@
       try {
         const response = await fetch(`/api/blood/${bloodGroup}`);
         const bloodBanks = await response.json();
-        
+
         displayBloodBanks(bloodBanks, bloodGroup);
       } catch (error) {
         console.error('Error loading blood banks:', error);
@@ -3002,9 +3259,9 @@
     function displayBloodBanks(bloodBanks, bloodGroup) {
       const bloodBanksList = document.getElementById('blood-banks-list');
       const resultsCount = document.getElementById('results-count');
-      
+
       resultsCount.textContent = `${bloodBanks.length} blood banks found for ${bloodGroup}`;
-      
+
       if (bloodBanks.length === 0) {
         bloodBanksList.innerHTML = `
           <div class="empty-state">
@@ -3048,10 +3305,119 @@
       }
     }
 
+    // App Download Page Functions
+    function initializeAppPage() {
+      console.log('App download page initialized');
+      setupStarRating();
+      loadReviews();
+
+      const form = document.getElementById('app-review-form');
+      if (form && !form.dataset.initialized) {
+        form.addEventListener('submit', handleReviewSubmit);
+        form.dataset.initialized = 'true';
+      }
+    }
+
+    function setupStarRating() {
+      const stars = document.querySelectorAll('.star-btn');
+      const ratingInput = document.getElementById('rating-value');
+
+      stars.forEach(star => {
+        star.addEventListener('click', function () {
+          const rating = parseInt(this.dataset.rating);
+          ratingInput.value = rating;
+
+          stars.forEach(s => {
+            if (parseInt(s.dataset.rating) <= rating) {
+              s.classList.add('active');
+            } else {
+              s.classList.remove('active');
+            }
+          });
+        });
+      });
+    }
+
+    async function handleReviewSubmit(event) {
+      event.preventDefault();
+
+      const form = event.target;
+      const formData = new FormData(form);
+
+      const reviewData = {
+        name: formData.get('name'),
+        rating: parseInt(formData.get('rating')),
+        review: formData.get('review')
+      };
+
+      if (!reviewData.rating) {
+        showNotification('Please select a rating', 'error');
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/reviews', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(reviewData)
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+          showNotification('Review submitted successfully!', 'success');
+          form.reset();
+          document.querySelectorAll('.star-btn').forEach(s => s.classList.remove('active'));
+          document.getElementById('rating-value').value = '';
+          loadReviews(); // Reload list
+        } else {
+          showNotification(result.message || 'Failed to submit review.', 'error');
+        }
+      } catch (error) {
+        console.error('Review submission error:', error);
+        showNotification('Failed to submit review.', 'error');
+      }
+    }
+
+    async function loadReviews() {
+      const reviewsList = document.getElementById('reviews-list');
+
+      try {
+        const response = await fetch('/api/reviews');
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          if (data.data.length === 0) {
+            reviewsList.innerHTML = '<div class="empty-state"><p>No reviews yet. Be the first to review!</p></div>';
+            return;
+          }
+
+          reviewsList.innerHTML = data.data.map(review => `
+            <div class="review-card">
+              <div class="review-header">
+                <div class="review-author">${review.name}</div>
+                <div class="review-rating">
+                  ${Array(review.rating).fill('<span class="material-symbols-outlined">star</span>').join('')}
+                </div>
+              </div>
+              <div class="review-text">${review.review}</div>
+            </div>
+          `).join('');
+        } else {
+          reviewsList.innerHTML = '<div class="empty-state"><p>Failed to load reviews.</p></div>';
+        }
+      } catch (error) {
+        console.error('Error loading reviews:', error);
+        reviewsList.innerHTML = '<div class="empty-state"><p>Failed to load reviews.</p></div>';
+      }
+    }
+
     // Initialize the application
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       console.log('PuneEmergency application initialized');
-      
+
       // Initialize home page by default
       getCurrentLocation().then(location => {
         if (location) {
@@ -3060,5 +3426,107 @@
       });
     });
   </script>
+  </script>
+  <!-- Floating Download App Button -->
+  <style>
+    .floating-download-btn {
+      position: fixed;
+      right: 2rem;
+      bottom: 2rem;
+      z-index: 1001;
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      border-radius: 50%;
+      width: 64px;
+      height: 64px;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+      font-size: 2rem;
+      outline: none;
+    }
+
+    .floating-download-btn:hover {
+      background: var(--primary-dark);
+      box-shadow: 0 8px 24px rgba(220, 38, 38, 0.18);
+      transform: translateY(-2px) scale(1.08);
+    }
+
+    .floating-download-popup {
+      position: fixed;
+      right: 5.5rem;
+      bottom: 2.5rem;
+      z-index: 1002;
+      background: var(--white);
+      color: var(--gray-900);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-xl);
+      padding: 1.25rem 1.5rem;
+      min-width: 220px;
+      display: none;
+      flex-direction: column;
+      gap: 0.75rem;
+      animation: slideIn 0.3s;
+    }
+
+    .floating-download-popup.active {
+      display: flex;
+    }
+
+    .floating-download-popup .download-btn {
+      width: 100%;
+      justify-content: flex-start;
+      margin: 0;
+      background: var(--primary);
+      color: var(--white);
+    }
+
+    .floating-download-popup .download-btn:hover {
+      background: var(--primary-dark);
+      color: var(--white);
+    }
+  </style>
+  <button class="floating-download-btn" id="floatingDownloadBtn" title="Get the App" onclick="toggleDownloadPopup()">
+    <span class="material-symbols-outlined">download</span>
+  </button>
+  <div class="floating-download-popup" id="floatingDownloadPopup">
+    <div style="font-weight:600; font-size:1rem; margin-bottom:0.25rem;">Get PuneEmergency App</div>
+    <a href="https://expo.dev/accounts/lazerwave/projects/pune-emergency/builds/509eb74a-423b-4c61-8969-0af061259456" class="download-btn" target="_blank" style="margin-top: 0; background: var(--primary); color: var(--white);">
+      <span class="material-symbols-outlined">android</span>
+      Download APK
+    </a>
+    <a href="#" class="download-btn" onclick="showPage('app'); closeDownloadPopup(); return false;">
+      <span class="material-symbols-outlined">info</span>
+      More Info
+    </a>
+  </div>
+  <script>
+    function toggleDownloadPopup() {
+      const popup = document.getElementById('floatingDownloadPopup');
+      popup.classList.toggle('active');
+      // Close on outside click
+      if (popup.classList.contains('active')) {
+        setTimeout(() => {
+          document.addEventListener('mousedown', handleOutsideClick);
+        }, 0);
+      }
+    }
+    function closeDownloadPopup() {
+      document.getElementById('floatingDownloadPopup').classList.remove('active');
+      document.removeEventListener('mousedown', handleOutsideClick);
+    }
+    function handleOutsideClick(e) {
+      const popup = document.getElementById('floatingDownloadPopup');
+      const btn = document.getElementById('floatingDownloadBtn');
+      if (!popup.contains(e.target) && !btn.contains(e.target)) {
+        closeDownloadPopup();
+      }
+    }
+  </script>
 </body>
+
 </html>
